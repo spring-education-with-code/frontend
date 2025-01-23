@@ -30,15 +30,15 @@ const SpringProblemPage : React.FC = () => {
         <>
             <div className="d-flex flex-column vh-100">
                 <ProblemHeader></ProblemHeader>
-                <div className="flex-grow-1 bg-success p-2 text-dark bg-opacity-10">
+                <div className="flex-grow-1 dark-navy p-2 bg-opacity-10">
                 <h1>문제 풀어보기</h1>
                     <div className="d-flex gap-2 mt-3 h-100">
-                        <div className="col-6" style={{backgroundColor: "rgba(0,0,255,0.1)" }}>
+                        <div className="col-6">
                             <h2>문제 내용 </h2>
                             <h2> {response?.data?.concept?.[0]?.content} </h2>
                             <h2> 응? </h2>
                         </div>
-                        <div className="col-6" style={{backgroundColor: "rgba(0,0,255,0.1)" }}>
+                        <div className="col-6">
                             코드 작성 활활
                         </div>
                     </div>
