@@ -12,3 +12,7 @@ html, body, #root {
     background-color: #0D151C;
     color : #E0E1E2;
 }
+
+.d-flex.flex-column.vh-100 {
+    overflow: hidden;
+}
