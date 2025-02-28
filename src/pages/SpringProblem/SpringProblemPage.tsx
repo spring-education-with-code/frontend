@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { useParams } from 'react-router-dom';
 import ProblemFooter from "../../common/ProblemFooter";
 import ProblemHeader from "../../common/ProblemHeader";
@@ -8,6 +8,22 @@ import { SolutionContent } from "./SolutionContent";
 const SpringProblemPage : React.FC = () => {
     
     const { problemId } = useParams<{ problemId: string }>(); 
+
+    type Editors = {
+        controller_editor : string,
+        service_editor : string
+    }
+    //상태 끌어올리기(lift up) - 코드 제출을 위해서 
+    const [codeEditors, setCodeEditors] = useState<Editors>({
+        controller_editor: "package com.spring_education.template.controller;\n\n//Controller.java 코드를 작성해 주세요\n",
+        service_editor: "package com.spring_education.template.service;\n\n//Service.java 코드를 작성해 주세요\n"
+    });
+
+
+    const springCodeSubmit = () => {
+        const payload = { ...codeEditors };
+        console.log('payload 내용 : ', payload);
+    }
 
     const axiosParams = {
         url: `https://91be3bc2-5f71-4258-8286-b66990fcb0ef.mock.pstmn.io/problem/${problemId}`,
@@ -25,7 +41,6 @@ const SpringProblemPage : React.FC = () => {
     if (error) {
         return <div>Error: {error.message}</div>;
     }
-
 
     return(
         <>
@@ -46,11 +61,12 @@ const SpringProblemPage : React.FC = () => {
                             <p> {response?.data?.concept?.[0]?.content} </p>
                         </div>
                         <div className="col-6">
-                            <SolutionContent></SolutionContent>
+                            <SolutionContent codeEditors={codeEditors} setCodeEditors={setCodeEditors}></SolutionContent>
                         </div>
                     </div>
                 </div>
-                <ProblemFooter></ProblemFooter>
+
+                <ProblemFooter onSubmit={springCodeSubmit}></ProblemFooter>
             </div>
         </>
     )
