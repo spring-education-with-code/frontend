@@ -2,11 +2,11 @@ import {useState, Dispatch, SetStateAction} from "react";
 import MonacoEditor from 'react-monaco-editor';
 
 //EditorTabs에는 controller, service 만 들어갈 수 있음 
-type EditorTabs = 'controller_editor' | 'service_editor';
+type EditorTabs = 'controller' | 'service';
 
 type Editors = {
-    controller_editor : string,
-    service_editor : string
+    controller : string,
+    service : string
 }
 
 interface SolutionContentProps {
@@ -18,7 +18,7 @@ interface SolutionContentProps {
 export const SolutionContent = ({codeEditors , setCodeEditors}: SolutionContentProps) => {
 
     //activeTab 변수 . 참고로 setActiveTab 과 같이 set ~~ 하는 것은 관례라고 합니다 
-    const [activeTab, setActiveTab] = useState<EditorTabs>("controller_editor");
+    const [activeTab, setActiveTab] = useState<EditorTabs>("controller");
 
     const onChange = (newValue: string) => {
         setCodeEditors(() => ({
@@ -36,10 +36,10 @@ export const SolutionContent = ({codeEditors , setCodeEditors}: SolutionContentP
             theme="vs-dark"
             value={codeEditors[activeTab]}
             onChange={onChange}></MonacoEditor>
-        <button onClick = {()=>setActiveTab("controller_editor")}>
+        <button onClick = {()=>setActiveTab("controller")}>
         Controller.java
         </button>
-        <button onClick = {()=>setActiveTab("service_editor")}>
+        <button onClick = {()=>setActiveTab("service")}>
         Service.java
         </button>
         </>

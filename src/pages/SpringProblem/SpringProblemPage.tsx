@@ -1,28 +1,45 @@
 import React, {useState} from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import axios from 'axios';
 import ProblemFooter from "../../common/ProblemFooter";
 import ProblemHeader from "../../common/ProblemHeader";
 import { useGetProblem } from "../../common/useGetProblem";
 import { SolutionContent } from "./SolutionContent";
 
+const SERVER_URL = import.meta.env.VITE_SERVER_URL + "/api/problem/spring/";
+
 const SpringProblemPage : React.FC = () => {
     
     const { problemId } = useParams<{ problemId: string }>(); 
+    const navigate = useNavigate();
 
     type Editors = {
-        controller_editor : string,
-        service_editor : string
+        controller : string,
+        service : string
     }
-    //상태 끌어올리기(lift up) - 코드 제출을 위해서 
+    //상태 끌어올리기(lift up) - 코드 제출을 위해서
+    //훅을 위에 둬야한다. 아래에 두면 Uncaught Error: Rendered more hooks than during the previous render. 가 발생 한다  
     const [codeEditors, setCodeEditors] = useState<Editors>({
-        controller_editor: "package com.spring_education.template.controller;\n\n//Controller.java 코드를 작성해 주세요\n",
-        service_editor: "package com.spring_education.template.service;\n\n//Service.java 코드를 작성해 주세요\n"
+        controller: "package com.spring_education.template.controller;\n\n//Controller.java 코드를 작성해 주세요\n",
+        service: "package com.spring_education.template.service;\n\n//Service.java 코드를 작성해 주세요\n"
     });
 
 
     const springCodeSubmit = () => {
         const payload = { ...codeEditors };
-        console.log('payload 내용 : ', payload);
+
+        //console.log('payload 내용 : ', payload);
+        axios.post(`${SERVER_URL}${problemId}`, payload,{
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => {
+            navigate("/submit/" + problemId);
+        })
+        .catch(error => {
+            console.error('코드 제출 에러', error);
+        })
     }
 
     const axiosParams = {
