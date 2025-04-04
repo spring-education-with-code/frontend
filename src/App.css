@@ -2,3 +2,17 @@ html, body, #root {
     height: 100%;
     margin: 0;
 }
+
+.dark-navy {
+    background-color: #35414f;
+    color : #B2C0CC;/* 네이비 블루 색상 코드 */
+}
+
+.light-black{
+    background-color: #0D151C;
+    color : #E0E1E2;
+}
+
+.d-flex.flex-column.vh-100 {
+    overflow: hidden;
+}
