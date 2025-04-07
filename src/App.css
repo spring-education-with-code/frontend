@@ -3,6 +3,10 @@ html, body, #root {
     margin: 0;
 }
 
+.main-container { /* 페이지 메인 래퍼에 해당 */
+    min-height: 100vh;      /* 뷰포트 전체 높이만큼 최소 높이 설정 */
+}
+
 .dark-navy {
     background-color: #35414f;
     color : #B2C0CC;/* 네이비 블루 색상 코드 */
