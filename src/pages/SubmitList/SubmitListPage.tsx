@@ -4,17 +4,6 @@ import axios from "axios";
 import ProblemHeader from "../../common/ProblemHeader";
 
 //API 응답 타입 정의
-/*
-{
-	"totalCount" : number,
-	{
-		"submitId" : number,
-		"problemId" : number,
-		"result" : string
-	},
-	....
-}
-*/
 
 interface Submit{
     submitId: number;
@@ -25,6 +14,7 @@ interface Submit{
 
 interface SubmitResponse{
     totalCount: number;
+    totalPages: number;
     submits: Submit[];
 }
 
@@ -35,7 +25,27 @@ const SubmitListPage : React.FC = () => {
     const apiUrl = SERVER_URL + "/api/problem/submit/" + problemId;
     const sseUrl = SERVER_URL + "/api/alarm/connect";
 
-    const [submitData, setSubmitData] = useState<SubmitResponse>({ totalCount: 0, submits: [] });
+    const [submitData, setSubmitData] = useState<SubmitResponse>({ totalCount: 0, totalPages: 0, submits: [] });
+    const [currentPage, setCurrentPage] = useState(1);
+
+
+    useEffect(() => {
+        if(problemId){
+            //게시물 페이지 변경 시 새로운 제출 목록을 가져온다.
+            axios.get(apiUrl + "?pageNum=" + currentPage, {
+                headers: {
+                    'Content-Type' : 'application/json'
+            }
+            })
+            .then(response =>{
+                setSubmitData(response.data);
+                console.log(response.data);
+            })
+            .catch(error => {
+                console.error('/api/submit/ error', error)
+            });
+        }
+    }, [currentPage]);
 
     useEffect(() => {
         if(problemId){
@@ -87,10 +97,14 @@ const SubmitListPage : React.FC = () => {
         }
     },[problemId]);
 
+    
+
+    const pages = Array.from({ length: submitData.totalPages }, (_, index) => index + 1);
+
     return(
         <>
         <ProblemHeader></ProblemHeader>
-        <div className="flex-grow-1 dark-navy p-2 bg-opacity-10">
+        <div className="main-container flex-grow-1 dark-navy p-2 bg-opacity-10">
             <h1>제출 내역</h1>
             <table className="table table-secondary">
                 <thead>
@@ -112,6 +126,22 @@ const SubmitListPage : React.FC = () => {
                     ))}
                 </tbody>
             </table>
+
+            <nav aria-label="Page navigation">
+                <ul className="pagination justify-content-center">
+                    <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
+                        <a className="page-link" onClick={() => currentPage > 1 && setCurrentPage(currentPage - 1)}>이전 페이지</a>
+                    </li>
+                    {pages.map(page => (
+                        <li key={page} className={`page-item ${page === currentPage ? 'active' : ''}`}>
+                            <a className="page-link" onClick={() => setCurrentPage(page)}>{page}</a>
+                        </li>
+                    ))}
+                    <li className={`page-item ${currentPage === submitData.totalPages ? 'disabled' : ''}`}>
+                        <a className="page-link" onClick={() => currentPage < submitData.totalPages && setCurrentPage(currentPage + 1)}>다음 페이지</a>
+                    </li>
+                </ul>
+            </nav>
         </div>
 
         </>
