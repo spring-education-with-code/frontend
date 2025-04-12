@@ -47,7 +47,12 @@ export const ProblemContent = ({ problemId } : { problemId?: string }) =>{
     return(
         <>
             <h1>{problemData?.title}</h1>
+            
+            <hr></hr>
+
             <p> 난이도 : {problemData?.level}</p>
+
+            <hr></hr>
 
             <h3>문제 설명</h3>
             {problemData?.content.map((item, index) => {
@@ -60,6 +65,7 @@ export const ProblemContent = ({ problemId } : { problemId?: string }) =>{
                 }
             })}
 
+            <hr></hr>
             
             <h3>제약 사항</h3>
             {problemData?.constraint.map((item, index) => {
@@ -68,6 +74,8 @@ export const ProblemContent = ({ problemId } : { problemId?: string }) =>{
                 )
             })
             }
+
+            <hr></hr>
 
             <h3>입출력 예시</h3>
 
@@ -90,6 +98,8 @@ export const ProblemContent = ({ problemId } : { problemId?: string }) =>{
                     })}
                 </tbody>
             </table>
+
+            <hr></hr>
 
             <h3> 입출력 설명 </h3>
 
